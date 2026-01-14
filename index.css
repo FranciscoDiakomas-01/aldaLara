@@ -80,7 +80,7 @@ nav ul li a:hover {
 }
 
 nav ul li a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -5px;
   left: 0;
@@ -159,9 +159,8 @@ nav ul li a:hover::after {
   margin: 100px 20px 0;
   height: 90vh;
   max-height: 800px;
-  background: linear-gradient(rgba(0, 0, 0, 0.318), rgba(0, 0, 0, 0.468)), 
-              url("./assets/alda.jpg")
-              center/cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.318), rgba(0, 0, 0, 0.468)),
+    url("./assets/alda.jpg") center/cover;
   border-radius: 40px;
   display: flex;
   align-items: center;
@@ -173,13 +172,17 @@ nav ul li a:hover::after {
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 50%, rgba(0, 122, 255, 0.2) 0%, transparent 50%);
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(0, 122, 255, 0.2) 0%,
+    transparent 50%
+  );
 }
 
 .hero-content {
@@ -243,7 +246,11 @@ nav ul li a:hover::after {
 }
 
 .blue-card {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-dark) 100%
+  );
   color: white;
   position: relative;
   display: flex;
@@ -252,13 +259,14 @@ nav ul li a:hover::after {
 }
 
 .blue-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+  background: url("https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80")
+    center/cover;
   opacity: 0.3;
 }
 
@@ -707,19 +715,23 @@ footer {
 
 /* Responsividade com Menu Burger */
 @media (max-width: 1024px) {
-  .info-grid, .features, .courses-grid, .footer-content {
+  .info-grid,
+  .features,
+  .courses-grid,
+  .footer-content {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .about-content, .contact-content {
+
+  .about-content,
+  .contact-content {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .hero-content h1 {
     font-size: 2.8rem;
   }
-  
+
   .facts {
     flex-wrap: wrap;
     gap: 40px;
@@ -730,7 +742,7 @@ footer {
   .burger {
     display: block;
   }
-  
+
   nav ul {
     position: fixed;
     top: 0;
@@ -746,53 +758,61 @@ footer {
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     z-index: 1000;
   }
-  
+
   nav ul.active {
     right: 0;
   }
-  
+
   nav ul li a {
     font-size: 18px;
     color: var(--dark-bg);
   }
-  
+
   header nav {
     padding: 15px 5%;
   }
-  
-  .btn-primary {
-    display: none;
+
+  .secondBTN:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
   }
-  
+
   .hero {
     margin: 80px 15px 0;
     height: 70vh;
   }
-  
+
   .hero-content h1 {
     font-size: 2.2rem;
   }
-  
-  .info-grid, .features, .courses-grid, .footer-content {
+
+  .info-grid,
+  .features,
+  .courses-grid,
+  .footer-content {
     grid-template-columns: 1fr;
   }
-  
-  .card, .course-card {
+
+  .card,
+  .course-card {
     min-height: auto;
   }
-  
+
   .facts {
     padding: 50px 5%;
   }
-  
+
   .fact-item h2 {
     font-size: 2.2rem;
   }
-  
-  .section-header h2, .about-text h2, .contact-info h2 {
+
+  .section-header h2,
+  .about-text h2,
+  .contact-info h2 {
     font-size: 2.2rem;
   }
-  
+
   .contact-form {
     padding: 30px 20px;
   }
@@ -802,20 +822,21 @@ footer {
   .hero-content h1 {
     font-size: 1.8rem;
   }
-  
+
   .hero-content p {
     font-size: 1rem;
   }
-  
-  .btn-dark, .btn-outline {
+
+  .btn-dark,
+  .btn-outline {
     padding: 15px 25px;
     font-size: 14px;
   }
-  
+
   .card {
     padding: 30px 20px;
   }
-  
+
   nav ul {
     width: 80%;
   }
@@ -848,72 +869,76 @@ footer {
 
 /* Modais */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
-    background: white;
-    padding: 50px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    animation: modalFadeIn 0.3s ease;
+  background: white;
+  padding: 50px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: modalFadeIn 0.3s ease;
 }
 
 .modal-content.success {
-    padding: 40px;
+  padding: 40px;
 }
 
 .modal-content .fa-check-circle {
-    font-size: 60px;
-    color: var(--primary-blue);
-    margin-bottom: 20px;
+  font-size: 60px;
+  color: var(--primary-blue);
+  margin-bottom: 20px;
 }
 
 .modal-content h3 {
-    margin-bottom: 15px;
-    color: var(--dark-bg);
+  margin-bottom: 15px;
+  color: var(--dark-bg);
 }
 
 .modal-content p {
-    color: var(--gray-dark);
-    margin-bottom: 25px;
-    line-height: 1.6;
+  color: var(--gray-dark);
+  margin-bottom: 25px;
+  line-height: 1.6;
 }
 
 /* Loader */
 .loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid var(--primary-blue);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 25px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--primary-blue);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 25px;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
