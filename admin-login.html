@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Escola Alda Lara</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .admin-login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 20px;
+      }
+
+      .admin-login-box {
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .admin-logo {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--dark-bg);
+        margin-bottom: 10px;
+      }
+
+      .admin-subtitle {
+        color: var(--gray-dark);
+        margin-bottom: 40px;
+        font-size: 16px;
+      }
+
+      .admin-form h2 {
+        margin-bottom: 30px;
+        color: var(--dark-bg);
+        font-size: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--dark-bg);
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 15px 20px;
+        border: 1px solid var(--gray-light);
+        border-radius: 15px;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+      }
+
+      .back-home {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .admin-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: var(--gray-dark);
+        font-size: 14px;
+      }
+
+      .alert {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        text-align: left;
+        font-size: 14px;
+      }
+
+      .alert-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+
+      .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+      }
+
+      @media (max-width: 768px) {
+        .admin-login-box {
+          padding: 30px 20px;
+        }
+
+        .back-home {
+          position: relative;
+          top: 0;
+          left: 0;
+          margin-bottom: 20px;
+          justify-content: center;
+          color: var(--primary-blue);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="back-home">
+      <i class="fas fa-arrow-left"></i> Voltar para Home
+    </a>
+
+    <div class="admin-login-container">
+      <div class="admin-login-box">
+        <div class="admin-logo">Painel Administrativo</div>
+        <div class="admin-subtitle">Escola Alda Lara - Gestão de Alunos</div>
+
+        <div id="loginAlert" class="alert" style="display: none"></div>
+
+        <form id="adminLoginForm" class="admin-form">
+          <h2>Acesso Restrito</h2>
+          <div class="form-group">
+            <label for="adminPhone">Telefone de Administrador</label>
+            <input
+              type="tel"
+              id="adminPhone"
+              class="form-control"
+              placeholder="924090174"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="adminPassword">Senha</label>
+            <input
+              type="password"
+              id="adminPassword"
+              class="form-control"
+              placeholder="Digite a senha de administrador"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-dark" style="width: 100%">
+            Acessar Painel <i class="fas fa-lock"></i>
+          </button>
+        </form>
+
+        <div class="admin-footer">
+          <p>
+            <i class="fas fa-shield-alt"></i> Acesso restrito à equipe
+            administrativa
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Credenciais do administrador
+      const ADMIN_CREDENTIALS = {
+        phone: "924090174",
+        password: "ADMIN",
+      };
+
+      // Verifica se já está logado como admin
+      document.addEventListener("DOMContentLoaded", function () {
+        const adminToken = localStorage.getItem("adminToken");
+        if (adminToken) {
+          window.location.href = "./admin-dashboard.html";
+        }
+      });
+
+      // Formulário de login
+      document
+        .getElementById("adminLoginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const phone = document.getElementById("adminPhone").value.trim();
+          const password = document.getElementById("adminPassword").value;
+
+          const alertDiv = document.getElementById("loginAlert");
+
+          // Verifica credenciais
+          if (
+            phone === ADMIN_CREDENTIALS.phone &&
+            password === ADMIN_CREDENTIALS.password
+          ) {
+            // Gera um token simples (poderia ser mais complexo em produção)
+            const token = btoa(`admin:${Date.now()}`);
+            localStorage.setItem("adminToken", token);
+            localStorage.setItem("adminLoggedIn", "true");
+
+            // Mostra mensagem de sucesso
+            alertDiv.innerHTML =
+              '<i class="fas fa-check-circle"></i> Login realizado com sucesso! Redirecionando...';
+            alertDiv.className = "alert alert-success";
+            alertDiv.style.display = "block";
+
+            // Redireciona após 1 segundo
+            setTimeout(() => {
+              window.location.href = "./admin-dashboard.html";
+            }, 1000);
+          } else {
+            // Mostra erro
+            alertDiv.innerHTML =
+              '<i class="fas fa-exclamation-triangle"></i> Credenciais inválidas! Use telefone: 924090174 e senha: ADMIN';
+            alertDiv.className = "alert alert-danger";
+            alertDiv.style.display = "block";
+
+            // Limpa após 3 segundos
+            setTimeout(() => {
+              alertDiv.style.display = "none";
+            }, 3000);
+          }
+        });
+
+      // Auto-preenche para facilitar testes
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("adminPhone").value = ADMIN_CREDENTIALS.phone;
+        document.getElementById("adminPassword").value =
+          ADMIN_CREDENTIALS.password;
+      });
+    </script>
+  </body>
+</html>

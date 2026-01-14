@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Admin | Escola Alda Lara</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .admin-container {
+        min-height: 100vh;
+        padding: 100px 5% 50px;
+        background: #f8f9fa;
+      }
+
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .admin-title h1 {
+        font-size: 28px;
+        color: var(--dark-bg);
+        margin-bottom: 5px;
+      }
+
+      .admin-title p {
+        color: var(--gray-dark);
+      }
+
+      .admin-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .admin-nav {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        background: white;
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 12px;
+        background: white;
+        color: var(--gray-dark);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-btn.active {
+        background: var(--primary-blue);
+        color: white;
+      }
+
+      .nav-btn:hover:not(.active) {
+        background: #f1f5f9;
+      }
+
+      .admin-section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .admin-section.active {
+        display: block;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-blue);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+      }
+
+      .stat-info h3 {
+        font-size: 32px;
+        color: var(--dark-bg);
+        margin-bottom: 5px;
+      }
+
+      .stat-info p {
+        color: var(--gray-dark);
+        font-size: 14px;
+      }
+
+      .table-container {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        margin-top: 20px;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .admin-table th {
+        background: var(--primary-blue);
+        color: white;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .admin-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        color: var(--gray-dark);
+      }
+
+      .admin-table tr:hover {
+        background: #f8fafc;
+      }
+
+      .admin-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .badge-info {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--gray-dark);
+      }
+
+      .empty-state i {
+        font-size: 60px;
+        color: #e5e7eb;
+        margin-bottom: 20px;
+      }
+
+      .empty-state h3 {
+        margin-bottom: 10px;
+        color: var(--dark-bg);
+      }
+
+      .search-box {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        align-items: center;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+      }
+
+      .export-btn {
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+
+      .export-btn:hover {
+        background: #0da271;
+        transform: translateY(-2px);
+      }
+
+      .logout-btn {
+        background: var(--accent);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+
+      .logout-btn:hover {
+        background: #e55a2b;
+        transform: translateY(-2px);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .admin-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .admin-nav {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+        }
+
+        .admin-table {
+          display: block;
+          overflow-x: auto;
+        }
+
+        .search-box {
+          flex-direction: column;
+        }
+
+        .search-box input {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <nav>
+        <div class="logo">Admin -IPIAL</div>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#" id="refreshData">Atualizar</a></li>
+        </ul>
+        <div class="burger">
+          <i class="fas fa-bars"></i>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </nav>
+    </header>
+
+    <div class="admin-container">
+      <div class="admin-header">
+        <div class="admin-title">
+          <h1>Painel Administrativo</h1>
+          <p>Gestão completa de alunos e matrículas</p>
+        </div>
+        <div class="admin-actions">
+          <button class="export-btn" id="exportData">
+            <i class="fas fa-download"></i> Exportar Dados
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-nav">
+        <button class="nav-btn active" data-section="dashboard">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </button>
+        <button class="nav-btn" data-section="alunos">
+          <i class="fas fa-users"></i> Alunos
+        </button>
+        <button class="nav-btn" data-section="matriculas">
+          <i class="fas fa-graduation-cap"></i> Matrículas
+        </button>
+        <button class="nav-btn" data-section="cursos">
+          <i class="fas fa-book"></i> Cursos
+        </button>
+      </div>
+
+      <!-- Dashboard -->
+      <div id="dashboardSection" class="admin-section active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalAlunos">0</h3>
+              <p>Total de Alunos</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalMatriculas">0</h3>
+              <p>Matrículas Ativas</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalCursos">4</h3>
+              <p>Cursos Oferecidos</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="hojeMatriculas">0</h3>
+              <p>Matrículas Hoje</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <h3 style="padding: 20px 20px 0; color: var(--dark-bg)">
+            Últimas Matrículas
+          </h3>
+          <table class="admin-table" id="recentEnrollmentsTable">
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Data</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentEnrollmentsBody">
+              <!-- Últimas matrículas serão carregadas aqui -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Alunos -->
+      <div id="alunosSection" class="admin-section">
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchAlunos"
+            placeholder="Buscar aluno por nome ou telefone..."
+          />
+          <button class="btn-dark" onclick="searchAlunos()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="alunosTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data Cadastro</th>
+                <th>Matrículas</th>
+              </tr>
+            </thead>
+            <tbody id="alunosBody">
+              <!-- Alunos serão carregados aqui -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Matrículas -->
+      <div id="matriculasSection" class="admin-section">
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchMatriculas"
+            placeholder="Buscar matrícula por aluno ou curso..."
+          />
+          <button class="btn-dark" onclick="searchMatriculas()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="matriculasTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Data Matrícula</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="matriculasBody">
+              <!-- Matrículas serão carregadas aqui -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cursos -->
+      <div id="cursosSection" class="admin-section">
+        <div class="table-container">
+          <table class="admin-table" id="cursosTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Curso</th>
+                <th>Duração</th>
+                <th>Descrição</th>
+                <th>Alunos Matriculados</th>
+              </tr>
+            </thead>
+            <tbody id="cursosBody">
+              <!-- Cursos serão carregados aqui -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="./db.js"></script>
+    <script>
+      // Verifica se o admin está logado
+      function checkAdminAuth() {
+        const adminToken = localStorage.getItem("adminToken");
+        const adminLoggedIn = localStorage.getItem("adminLoggedIn");
+
+        if (!adminToken || adminLoggedIn !== "true") {
+          window.location.href = "./admin-login.html";
+          return false;
+        }
+        return true;
+      }
+
+      // Navegação entre seções
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const section = this.getAttribute("data-section");
+
+          // Ativa botão clicado
+          document.querySelectorAll(".nav-btn").forEach((b) => {
+            b.classList.remove("active");
+          });
+          this.classList.add("active");
+
+          // Mostra seção correspondente
+          document.querySelectorAll(".admin-section").forEach((sec) => {
+            sec.classList.remove("active");
+          });
+          document.getElementById(`${section}Section`).classList.add("active");
+
+          // Carrega dados da seção
+          if (section === "alunos") loadAlunos();
+          else if (section === "matriculas") loadMatriculas();
+          else if (section === "cursos") loadCursos();
+        });
+      });
+
+      // Carrega dados do dashboard
+      async function loadDashboard() {
+        if (!checkAdminAuth()) return;
+
+        try {
+          const users = await schoolDB.getAllUsers();
+          const enrollments = await schoolDB.getAllEnrollments();
+          const courses = await schoolDB.getAllCourses();
+
+          // Atualiza estatísticas
+          document.getElementById("totalAlunos").textContent = users.length;
+          document.getElementById("totalMatriculas").textContent =
+            enrollments.length;
+          document.getElementById("totalCursos").textContent = courses.length;
+
+          // Matrículas de hoje
+          const today = new Date().toISOString().split("T")[0];
+          const todayEnrollments = enrollments.filter(
+            (e) => e.enrollmentDate && e.enrollmentDate.startsWith(today)
+          );
+          document.getElementById("hojeMatriculas").textContent =
+            todayEnrollments.length;
+
+          // Últimas matrículas (últimas 10)
+          const recentEnrollments = [...enrollments]
+            .sort(
+              (a, b) => new Date(b.enrollmentDate) - new Date(a.enrollmentDate)
+            )
+            .slice(0, 10);
+
+          const body = document.getElementById("recentEnrollmentsBody");
+          if (recentEnrollments.length === 0) {
+            body.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 40px;">Nenhuma matrícula encontrada</td></tr>`;
+          } else {
+            let html = "";
+            recentEnrollments.forEach((enrollment) => {
+              const user = users.find((u) => u.id === enrollment.userId);
+              const course = courses.find((c) => c.id === enrollment.courseId);
+
+              html += `
+                            <tr>
+                                <td>${
+                                  user ? user.name : "Aluno não encontrado"
+                                }</td>
+                                <td>${
+                                  enrollment.courseName ||
+                                  (course
+                                    ? course.name
+                                    : "Curso não encontrado")
+                                }</td>
+                                <td>${new Date(
+                                  enrollment.enrollmentDate
+                                ).toLocaleDateString("pt-AO")}</td>
+                                <td><span class="badge badge-success">${
+                                  enrollment.status || "Ativo"
+                                }</span></td>
+                            </tr>
+                        `;
+            });
+            body.innerHTML = html;
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dashboard:", error);
+          alert("Erro ao carregar dados do dashboard");
+        }
+      }
+
+      // Carrega lista de alunos
+      async function loadAlunos(searchTerm = "") {
+        if (!checkAdminAuth()) return;
+
+        try {
+          const users = await schoolDB.getAllUsers();
+          const enrollments = await schoolDB.getAllEnrollments();
+
+          // Filtra se houver busca
+          let filteredUsers = users;
+          if (searchTerm) {
+            searchTerm = searchTerm.toLowerCase();
+            filteredUsers = users.filter(
+              (user) =>
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.phone.includes(searchTerm)
+            );
+          }
+
+          const body = document.getElementById("alunosBody");
+          if (filteredUsers.length === 0) {
+            body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px;">
+                        ${
+                          searchTerm
+                            ? "Nenhum aluno encontrado"
+                            : "Nenhum aluno cadastrado"
+                        }
+                    </td></tr>`;
+          } else {
+            let html = "";
+            filteredUsers.forEach((user) => {
+              const userEnrollments = enrollments.filter(
+                (e) => e.userId === user.id
+              );
+
+              html += `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td><strong>${user.name}</strong></td>
+                                <td>${user.phone}</td>
+                                <td>${new Date(
+                                  user.createdAt
+                                ).toLocaleDateString("pt-AO")}</td>
+                                <td><span class="badge badge-info">${
+                                  userEnrollments.length
+                                } matrícula(s)</span></td>
+                            </tr>
+                        `;
+            });
+            body.innerHTML = html;
+          }
+        } catch (error) {
+          console.error("Erro ao carregar alunos:", error);
+          body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px; color: red;">
+                    Erro ao carregar alunos: ${error.message}
+                </td></tr>`;
+        }
+      }
+
+      // Carrega lista de matrículas
+      async function loadMatriculas(searchTerm = "", statusFilter = "") {
+        if (!checkAdminAuth()) return;
+
+        try {
+          const enrollments = await schoolDB.getAllEnrollments();
+          const users = await schoolDB.getAllUsers();
+          const courses = await schoolDB.getAllCourses();
+
+          // Ordena por data mais recente
+          let sortedEnrollments = [...enrollments].sort(
+            (a, b) => new Date(b.enrollmentDate) - new Date(a.enrollmentDate)
+          );
+
+          // Filtra se houver busca
+          if (searchTerm) {
+            searchTerm = searchTerm.toLowerCase();
+            sortedEnrollments = sortedEnrollments.filter((enrollment) => {
+              const user = users.find((u) => u.id === enrollment.userId);
+              const course = courses.find((c) => c.id === enrollment.courseId);
+
+              return (
+                (user && user.name.toLowerCase().includes(searchTerm)) ||
+                (enrollment.courseName &&
+                  enrollment.courseName.toLowerCase().includes(searchTerm)) ||
+                (course && course.name.toLowerCase().includes(searchTerm))
+              );
+            });
+          }
+
+          // Filtra por status
+          if (statusFilter) {
+            sortedEnrollments = sortedEnrollments.filter(
+              (e) => e.status === statusFilter
+            );
+          }
+
+          const body = document.getElementById("matriculasBody");
+          if (sortedEnrollments.length === 0) {
+            body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px;">
+                        ${
+                          searchTerm || statusFilter
+                            ? "Nenhuma matrícula encontrada"
+                            : "Nenhuma matrícula cadastrada"
+                        }
+                    </td></tr>`;
+          } else {
+            let html = "";
+            sortedEnrollments.forEach((enrollment) => {
+              const user = users.find((u) => u.id === enrollment.userId);
+              const course = courses.find((c) => c.id === enrollment.courseId);
+              const status = enrollment.status || "ativo";
+
+              html += `
+                            <tr>
+                                <td>${enrollment.id}</td>
+                                <td><strong>${
+                                  user ? user.name : "Aluno não encontrado"
+                                }</strong></td>
+                                <td>${
+                                  enrollment.courseName ||
+                                  (course
+                                    ? course.name
+                                    : "Curso não encontrado")
+                                }</td>
+                                <td>${new Date(
+                                  enrollment.enrollmentDate
+                                ).toLocaleDateString("pt-AO")}</td>
+                                <td><span class="badge ${
+                                  status === "ativo"
+                                    ? "badge-success"
+                                    : "badge-warning"
+                                }">
+                                    ${
+                                      status.charAt(0).toUpperCase() +
+                                      status.slice(1)
+                                    }
+                                </span></td>
+                            </tr>
+                        `;
+            });
+            body.innerHTML = html;
+          }
+        } catch (error) {
+          console.error("Erro ao carregar matrículas:", error);
+        }
+      }
+
+      // Carrega lista de cursos
+      async function loadCursos() {
+        if (!checkAdminAuth()) return;
+
+        try {
+          const courses = await schoolDB.getAllCourses();
+          const enrollments = await schoolDB.getAllEnrollments();
+
+          const body = document.getElementById("cursosBody");
+          if (courses.length === 0) {
+            body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px;">Nenhum curso cadastrado</td></tr>`;
+          } else {
+            let html = "";
+            courses.forEach((course) => {
+              const courseEnrollments = enrollments.filter(
+                (e) => e.courseId === course.id
+              );
+
+              html += `
+                            <tr>
+                                <td>${course.id}</td>
+                                <td><strong>${course.name}</strong></td>
+                                <td>${course.duration}</td>
+                                <td>${
+                                  course.description || "Sem descrição"
+                                }</td>
+                                <td><span class="badge badge-info">${
+                                  courseEnrollments.length
+                                } aluno(s)</span></td>
+                            </tr>
+                        `;
+            });
+            body.innerHTML = html;
+          }
+        } catch (error) {
+          console.error("Erro ao carregar cursos:", error);
+        }
+      }
+
+      // Funções de busca
+      function searchAlunos() {
+        const searchTerm = document.getElementById("searchAlunos").value;
+        loadAlunos(searchTerm);
+      }
+
+      function searchMatriculas() {
+        const searchTerm = document.getElementById("searchMatriculas").value;
+        loadMatriculas(searchTerm);
+      }
+
+      // Exportar dados
+      document
+        .getElementById("exportData")
+        .addEventListener("click", async function () {
+          try {
+            const users = await schoolDB.getAllUsers();
+            const enrollments = await schoolDB.getAllEnrollments();
+            const courses = await schoolDB.getAllCourses();
+
+            const data = {
+              timestamp: new Date().toISOString(),
+              total_alunos: users.length,
+              total_matriculas: enrollments.length,
+              total_cursos: courses.length,
+              alunos: users,
+              matriculas: enrollments,
+              cursos: courses,
+            };
+
+            // Cria arquivo JSON para download
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri =
+              "data:application/json;charset=utf-8," +
+              encodeURIComponent(dataStr);
+
+            const exportFileDefaultName = `dados_escola_alda_lara_${
+              new Date().toISOString().split("T")[0]
+            }.json`;
+
+            const linkElement = document.createElement("a");
+            linkElement.setAttribute("href", dataUri);
+            linkElement.setAttribute("download", exportFileDefaultName);
+            linkElement.click();
+
+            alert("Dados exportados com sucesso!");
+          } catch (error) {
+            console.error("Erro ao exportar dados:", error);
+            alert("Erro ao exportar dados");
+          }
+        });
+
+      // Logout
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+          if (
+            confirm("Tem certeza que deseja sair do painel administrativo?")
+          ) {
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("adminLoggedIn");
+            window.location.href = "./admin-login.html";
+          }
+        });
+
+      // Atualizar dados
+      document
+        .getElementById("refreshData")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          const activeSection = document
+            .querySelector(".nav-btn.active")
+            .getAttribute("data-section");
+
+          if (activeSection === "dashboard") loadDashboard();
+          else if (activeSection === "alunos") loadAlunos();
+          else if (activeSection === "matriculas") loadMatriculas();
+          else if (activeSection === "cursos") loadCursos();
+
+          alert("Dados atualizados!");
+        });
+
+      // Inicialização
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!checkAdminAuth()) return;
+
+        loadDashboard();
+
+        // Burger menu para mobile
+        const burger = document.querySelector(".burger");
+        const navMenu = document.querySelector("nav ul");
+
+        if (burger && navMenu) {
+          burger.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            burger.innerHTML = navMenu.classList.contains("active")
+              ? '<i class="fas fa-times"></i>'
+              : '<i class="fas fa-bars"></i>';
+          });
+        }
+      });
+
+      // Adicione este método ao db.js se não existir
+      if (!schoolDB.getAllEnrollments) {
+        schoolDB.getAllEnrollments = async function () {
+          return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(
+              ["enrollments"],
+              "readonly"
+            );
+            const store = transaction.objectStore("enrollments");
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+              resolve(request.result || []);
+            };
+
+            request.onerror = (event) => {
+              reject(event.target.error);
+            };
+          });
+        };
+      }
+    </script>
+  </body>
+</html>

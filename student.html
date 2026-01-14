@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minha Conta | Escola Alda Lara</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .student-container {
+        min-height: 100vh;
+        padding: 100px 5% 50px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      }
+
+      .student-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .student-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .student-avatar {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .student-details h1 {
+        font-size: 28px;
+        margin-bottom: 5px;
+        color: var(--dark-bg);
+      }
+
+      .student-details p {
+        color: var(--gray-dark);
+        font-size: 16px;
+      }
+
+      .logout-btn {
+        background: var(--accent);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+
+      .logout-btn:hover {
+        background: #e55a2b;
+        transform: translateY(-2px);
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 50px;
+      }
+
+      .dashboard-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s;
+      }
+
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .card-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-blue);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+      }
+
+      .card-header h3 {
+        font-size: 20px;
+        color: var(--dark-bg);
+      }
+
+      .enrollments-list {
+        margin-top: 50px;
+      }
+
+      .enrollments-list h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: var(--dark-bg);
+      }
+
+      .enrollment-item {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s;
+      }
+
+      .enrollment-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .enrollment-info h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: var(--dark-bg);
+      }
+
+      .enrollment-meta {
+        display: flex;
+        gap: 20px;
+        color: var(--gray-dark);
+        font-size: 14px;
+      }
+
+      .enrollment-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .enrollment-status {
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .status-active {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .no-enrollments {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--gray-dark);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .no-enrollments i {
+        font-size: 60px;
+        color: var(--gray-light);
+        margin-bottom: 20px;
+      }
+
+      .no-enrollments h3 {
+        margin-bottom: 15px;
+        color: var(--dark-bg);
+      }
+
+      .explore-courses-btn {
+        margin-top: 40px;
+      }
+
+      @media (max-width: 1024px) {
+        .dashboard-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .student-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .enrollment-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <nav>
+        <div class="logo">Escola Alda Lara</div>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#courses">Cursos</a></li>
+          <li><a href="index.html#footer">Contactos</a></li>
+        </ul>
+        <div class="burger">
+          <i class="fas fa-bars"></i>
+        </div>
+      </nav>
+    </header>
+
+    <div class="student-container">
+      <div class="student-header">
+        <div class="student-info">
+          <div class="student-avatar" id="studentAvatar">AL</div>
+          <div class="student-details">
+            <h1 id="studentName">Carregando...</h1>
+            <p id="studentPhone">Telefone: ---</p>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3>Meus Cursos</h3>
+          </div>
+          <p id="coursesCount">Carregando...</p>
+        </div>
+      </div>
+
+      <div class="enrollments-list">
+        <h2>Minhas Matrículas</h2>
+        <div id="enrollmentsContainer">
+          <!-- Matrículas serão carregadas aqui -->
+        </div>
+      </div>
+    </div>
+
+    <script src="./db.js"></script>
+    <script>
+      // Verifica se o usuário está logado
+      function checkAuth() {
+        const loggedInUser = localStorage.getItem("loggedInUser");
+        if (!loggedInUser) {
+          window.location.href = "./login.html";
+          return null;
+        }
+
+        try {
+          const user = JSON.parse(loggedInUser);
+
+          // Se o usuário não tem ID, busca pelo telefone
+          if (!user.id && user.phone) {
+            return user; // Vai buscar depois
+          }
+
+          return user;
+        } catch (e) {
+          console.error("Erro ao parsear usuário:", e);
+          window.location.href = "./login.html";
+          return null;
+        }
+      }
+
+      // Carrega informações do usuário
+      async function loadUserData() {
+        let user = checkAuth();
+        if (!user) return;
+
+        // Se o usuário não tem ID mas tem telefone, busca no banco
+        if (!user.id && user.phone) {
+          try {
+            const dbUser = await schoolDB.getUserByPhone(user.phone);
+            if (dbUser) {
+              user = dbUser;
+              // Atualiza o localStorage com o usuário completo
+              localStorage.setItem("loggedInUser", JSON.stringify(dbUser));
+            } else {
+              // Usuário não encontrado no banco
+              localStorage.removeItem("loggedInUser");
+              window.location.href = "./login.html";
+              return;
+            }
+          } catch (error) {
+            console.error("Erro ao buscar usuário:", error);
+            return;
+          }
+        }
+
+        // Mostra informações do usuário
+        document.getElementById("studentName").textContent = user.name;
+        document.getElementById(
+          "studentPhone"
+        ).textContent = `Telefone: ${user.phone}`;
+
+        // Cria avatar com iniciais
+        const initials = user.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .substring(0, 2);
+        document.getElementById("studentAvatar").textContent = initials;
+
+        // Carrega matrículas
+        try {
+          // Certifica que user.id é um número
+          const userId = Number(user.id);
+          const enrollments = await schoolDB.getUserEnrollments(userId);
+          const courses = await schoolDB.getAllCourses();
+
+          console.log("Matrículas encontradas:", enrollments);
+          console.log("Cursos disponíveis:", courses);
+
+          // Atualiza contadores
+          document.getElementById(
+            "coursesCount"
+          ).textContent = `${enrollments.length} curso(s) matriculado(s)`;
+          // Mostra matrículas
+          const container = document.getElementById("enrollmentsContainer");
+
+          if (enrollments.length === 0) {
+            container.innerHTML = `
+          <div class="no-enrollments">
+            <i class="fas fa-book"></i>
+            <h3>Nenhuma matrícula encontrada</h3>
+            <p>Você ainda não se matriculou em nenhum curso.</p>
+            <a href="index.html#courses" class="btn-outline explore-courses-btn">
+              Explorar Cursos
+            </a>
+          </div>
+        `;
+          } else {
+            let html = "";
+            enrollments.forEach((enrollment) => {
+              // Busca o curso correspondente
+              const course =
+                courses.find(
+                  (c) => Number(c.id) === Number(enrollment.courseId)
+                ) || {};
+
+              html += `
+            <div class="enrollment-item">
+              <div class="enrollment-info">
+                <h4>${enrollment.courseName || course.name || "Curso"}</h4>
+                <div class="enrollment-meta">
+                  <span><i class="far fa-calendar"></i> Matriculado em: ${new Date(
+                    enrollment.enrollmentDate
+                  ).toLocaleDateString("pt-AO")}</span>
+                  <span><i class="far fa-clock"></i> ${
+                    course.duration || "--"
+                  }</span>
+                </div>
+              </div>
+              <div class="enrollment-status status-active">
+                ${enrollment.status || "Ativo"}
+              </div>
+            </div>
+          `;
+            });
+            container.innerHTML = html;
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dados:", error);
+          document.getElementById("enrollmentsContainer").innerHTML = `
+        <div class="no-enrollments">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Erro ao carregar matrículas</h3>
+          <p>${
+            error.message || "Ocorreu um erro ao carregar suas informações."
+          }</p>
+          <p>Tente fazer login novamente.</p>
+        </div>
+      `;
+        }
+      }
+
+      // Logout
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+          if (confirm("Tem certeza que deseja sair?")) {
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "./login.html";
+          }
+        });
+
+      // Inicialização
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Espera o banco inicializar
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        loadUserData();
+
+        // Burger menu para mobile
+        const burger = document.querySelector(".burger");
+        const navMenu = document.querySelector("nav ul");
+
+        if (burger && navMenu) {
+          burger.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            burger.innerHTML = navMenu.classList.contains("active")
+              ? '<i class="fas fa-times"></i>'
+              : '<i class="fas fa-bars"></i>';
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

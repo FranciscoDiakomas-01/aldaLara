@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-01-14T21:17:17.297Z",
+  "total_alunos": 1,
+  "total_matriculas": 4,
+  "total_cursos": 4,
+  "alunos": [
+    {
+      "name": "Frandev",
+      "phone": "935555500",
+      "password": "Pedra@01",
+      "createdAt": "2026-01-14T20:46:40.792Z",
+      "id": 2
+    }
+  ],
+  "matriculas": [
+    {
+      "userId": 2,
+      "courseId": 1,
+      "courseName": "Eletricidade",
+      "enrollmentDate": "2026-01-14T21:07:27.631Z",
+      "status": "ativo",
+      "id": 8
+    },
+    {
+      "userId": 2,
+      "courseId": 2,
+      "courseName": "Eletrônica e Telecomunicações",
+      "enrollmentDate": "2026-01-14T21:07:31.498Z",
+      "status": "ativo",
+      "id": 9
+    },
+    {
+      "userId": 2,
+      "courseId": 3,
+      "courseName": "Informática",
+      "enrollmentDate": "2026-01-14T21:07:35.124Z",
+      "status": "ativo",
+      "id": 10
+    },
+    {
+      "userId": 2,
+      "courseId": 4,
+      "courseName": "Construção Civil",
+      "enrollmentDate": "2026-01-14T21:07:39.819Z",
+      "status": "ativo",
+      "id": 11
+    }
+  ],
+  "cursos": [
+    {
+      "name": "Eletricidade",
+      "duration": "4 anos",
+      "description": "Aprenda os fundamentos da eletricidade de forma prática e segura.",
+      "image": "./assets/eletricity.jpeg",
+      "id": 1
+    },
+    {
+      "name": "Eletrônica e Telecomunicações",
+      "duration": "4 anos",
+      "description": "Domine os princípios da eletrônica e das telecomunicações.",
+      "image": "./assets/eletronic.jpeg",
+      "id": 2
+    },
+    {
+      "name": "Informática",
+      "duration": "3 anos",
+      "description": "Aprenda as principais ferramentas de informática e programação.",
+      "image": "./assets/infor.jpeg",
+      "id": 3
+    },
+    {
+      "name": "Construção Civil",
+      "duration": "4 anos",
+      "description": "Desenvolva habilidades práticas e teóricas em construção civil.",
+      "image": "./assets/constru.jpeg",
+      "id": 4
+    }
+  ]
+}

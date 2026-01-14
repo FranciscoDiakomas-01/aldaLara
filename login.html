@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Escola Alda Lara</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--gray-dark);
+            transition: all 0.3s;
+        }
+
+        .auth-tab.active {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--primary-blue);
+            margin-bottom: -2px;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 30px;
+            color: var(--dark-bg);
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--dark-bg);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid var(--gray-light);
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--gray-dark);
+        }
+
+        .auth-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .auth-box {
+                padding: 30px 20px;
+            }
+            
+            .back-home {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Voltar para Home
+    </a>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="register">Criar Conta</div>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="auth-form active">
+                <h2>Faça seu Login</h2>
+                <div class="form-group">
+                    <label for="loginPhone">Telefone</label>
+                    <input type="tel" id="loginPhone" class="form-control" 
+                           placeholder="+244 912 345 678" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" class="form-control" 
+                           placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn-dark" style="width: 100%;">
+                    Entrar <i class="fas fa-sign-in-alt"></i>
+                </button>
+            </form>
+
+            <!-- Formulário de Registro -->
+            <form id="registerForm" class="auth-form">
+                <h2>Criar Nova Conta</h2>
+                <div class="form-group">
+                    <label for="registerName">Nome Completo</label>
+                    <input type="text" id="registerName" class="form-control" 
+                           placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Telefone</label>
+                    <input type="tel" id="registerPhone" class="form-control" 
+                           placeholder="+244 912 345 678" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Senha</label>
+                    <input type="password" id="registerPassword" class="form-control" 
+                           placeholder="Crie uma senha forte" required minlength="6">
+                </div>
+                <button type="submit" class="btn-dark" style="width: 100%;">
+                    Criar Conta <i class="fas fa-user-plus"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Problemas para acessar? <a href="mailto:suporte@escolaaldalara.ao">Contacte-nos</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./db.js"></script>
+    <script>
+        // Toggle entre login e registro
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Ativa tab selecionada
+                document.querySelectorAll('.auth-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Mostra formulário correspondente
+                document.querySelectorAll('.auth-form').forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById(tabId + 'Form').classList.add('active');
+            });
+        });
+
+        // Formulário de Login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const user = await schoolDB.getUserByPhone(phone);
+                
+                if (!user) {
+                    alert('Telefone não cadastrado!');
+                    return;
+                }
+                
+                if (user.password !== password) {
+                    alert('Senha incorreta!');
+                    return;
+                }
+                
+                // Salva usuário logado no localStorage
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                
+                // Redireciona para dashboard
+                alert('Login realizado com sucesso!');
+                window.location.href = './student.html';
+                
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('Erro ao fazer login. Tente novamente.');
+            }
+        });
+
+        // Formulário de Registro
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres!');
+                return;
+            }
+            
+            try {
+                // Verifica se telefone já existe
+                const existingUser = await schoolDB.getUserByPhone(phone);
+                if (existingUser) {
+                    alert('Este telefone já está cadastrado!');
+                    return;
+                }
+                
+                // Cria novo usuário
+                const newUser = {
+                    name: name,
+                    phone: phone,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+                
+                const userId = await schoolDB.addUser(newUser);
+                newUser.id = userId;
+                
+                // Faz login automático
+                localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+                
+                alert('Conta criada com sucesso!');
+                window.location.href = './student.html';
+                
+            } catch (error) {
+                console.error('Erro no registro:', error);
+                alert('Erro ao criar conta. Tente novamente.');
+            }
+        });
+
+        // Verifica se já está logado
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                window.location.href = './student.html';
+            }
+        });
+    </script>
+</body>
+</html>

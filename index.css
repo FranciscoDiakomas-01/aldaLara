@@ -843,3 +843,77 @@ footer {
     transform: translateX(0);
   }
 }
+
+/* Adicione estas regras ao final do seu index.css */
+
+/* Modais */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.modal-content.success {
+    padding: 40px;
+}
+
+.modal-content .fa-check-circle {
+    font-size: 60px;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+    color: var(--dark-bg);
+}
+
+.modal-content p {
+    color: var(--gray-dark);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* Loader */
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary-blue);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 25px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

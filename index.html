@@ -153,6 +153,25 @@
         </div>
       </section>
 
+      <div id="loadingModal" class="modal">
+        <div class="modal-content">
+          <div class="loader"></div>
+          <p>Processando sua inscrição...</p>
+        </div>
+      </div>
+
+      <div id="successModal" class="modal">
+        <div class="modal-content success">
+          <i class="fas fa-check-circle"></i>
+          <h3>Inscrição realizada com sucesso!</h3>
+          <p>
+            Sua inscrição foi processada com sucesso. Em breve entraremos em
+            contato.
+          </p>
+          <button class="btn-dark close-modal">OK</button>
+        </div>
+      </div>
+
       <!-- Seção Cursos -->
       <section class="courses" id="courses">
         <div class="section-header">
@@ -166,10 +185,7 @@
         <div class="courses-grid">
           <div class="course-card">
             <div class="course-image">
-              <img
-                src="./assets/eletricity.jpeg"
-                alt="Ensino Básico"
-              />
+              <img src="./assets/eletricity.jpeg" alt="Ensino Básico" />
             </div>
             <div class="course-content">
               <h3>Eletricidade</h3>
@@ -214,10 +230,7 @@
 
           <div class="course-card">
             <div class="course-image">
-              <img
-                src="./assets/infor.jpeg"
-                alt="Informática"
-              />
+              <img src="./assets/infor.jpeg" alt="Informática" />
             </div>
             <div class="course-content">
               <h3>Informática</h3>
@@ -238,9 +251,7 @@
 
           <div class="course-card">
             <div class="course-image">
-              <img
-                src="./assets/constru.jpeg"
-              />
+              <img src="./assets/constru.jpeg" />
             </div>
             <div class="course-content">
               <h3>Construção Civil</h3>
@@ -305,7 +316,10 @@
           <h3>Horário de Funcionamento</h3>
           <p><strong>Aulas:</strong><br />8h00 às 18h30</p>
           <p><strong>Biblioteca:</strong><br />8h00 às 20h00</p>
-          <p><em>* Encerra aos feriados nacionais</em></p>
+          <p><em>* Encerra aos feriados nacionais</em></p><!-- Adicione este link discretamente no footer ou em outro lugar -->
+<a href="./admin-login.html" style="position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 10px 15px; border-radius: 20px; font-size: 12px; text-decoration: none; z-index: 1000;">
+    <i class="fas fa-lock"></i> Admin
+</a>
         </div>
       </div>
 
@@ -317,8 +331,182 @@
       </div>
     </footer>
 
+    <script src="./db.js"></script>
     <script>
-      // TODO O JAVASCRIPT PERMANECE IGUAL
+      // CORREÇÃO: Esta função verifica qual botão foi clicado e qual curso corresponde
+      function setupCourseEnrollmentButtons() {
+        // Seleciona APENAS os botões dentro dos cards de curso
+        const courseButtons = document.querySelectorAll(
+          ".course-card .btn-outline"
+        );
+
+        console.log("Botões de curso encontrados:", courseButtons.length);
+
+        const courseNames = [
+          "Eletricidade",
+          "Eletrônica e Telecomunicações",
+          "Informática",
+          "Construção Civil",
+        ];
+
+        courseButtons.forEach((button, index) => {
+          if (index < courseNames.length) {
+            button.addEventListener("click", function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log(
+                `Clicou no curso: ${courseNames[index]}, ID: ${index + 1}`
+              );
+              enrollInCourse(courseNames[index], index + 1);
+            });
+
+            // Adiciona um atributo de dados para debugging
+            button.setAttribute("data-course-name", courseNames[index]);
+            button.setAttribute("data-course-id", index + 1);
+          }
+        });
+      }
+
+      // Verifica se o usuário está logado
+      function checkUserLoggedIn() {
+        const loggedInUser = localStorage.getItem("loggedInUser");
+        if (loggedInUser) {
+          document.getElementById("accessBtn").innerHTML =
+            'Minha Conta <i class="fas fa-user"></i>';
+        }
+      }
+
+      // Redireciona para login ou dashboard
+      document
+        .getElementById("accessBtn")
+        .addEventListener("click", function () {
+          const loggedInUser = localStorage.getItem("loggedInUser");
+          if (loggedInUser) {
+            window.location.href = "./student.html";
+          } else {
+            window.location.href = "./login.html";
+          }
+        });
+
+      // Função para matricular usuário - VERSÃO CORRIGIDA
+      async function enrollInCourse(courseName, courseId) {
+        console.log(
+          "Tentando matricular no curso:",
+          courseName,
+          "ID:",
+          courseId
+        );
+
+        const loggedInUser = localStorage.getItem("loggedInUser");
+
+        // Se não estiver logado, redireciona para login
+        if (!loggedInUser) {
+          alert("Por favor, faça login para se inscrever no curso.");
+          window.location.href = "./login.html";
+          return;
+        }
+
+        try {
+          // Mostra o loading
+          showLoadingModal();
+
+          const user = JSON.parse(loggedInUser);
+          console.log("Usuário logado ID:", user.id);
+
+          // Verifica se já está matriculado
+          const isEnrolled = await schoolDB.isUserEnrolled(user.id, courseId);
+          console.log("Já matriculado?", isEnrolled);
+
+          if (isEnrolled) {
+            hideLoadingModal();
+            alert("Você já está matriculado neste curso!");
+            return;
+          }
+
+          // Aguarda 2 segundos para simular processamento
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Realiza a matrícula
+          console.log("Realizando matrícula...");
+          const enrollmentId = await schoolDB.enrollUser(
+            user.id,
+            courseId,
+            courseName
+          );
+          console.log("Matrícula realizada com ID:", enrollmentId);
+
+          // Esconde loading e mostra sucesso
+          hideLoadingModal();
+          showSuccessModal();
+        } catch (error) {
+          console.error("Erro ao matricular:", error);
+          hideLoadingModal();
+          alert("Ocorreu um erro ao processar sua inscrição. Tente novamente.");
+        }
+      }
+
+      // Modais
+      function showLoadingModal() {
+        document.getElementById("loadingModal").style.display = "flex";
+      }
+
+      function hideLoadingModal() {
+        document.getElementById("loadingModal").style.display = "none";
+      }
+
+      function showSuccessModal() {
+        document.getElementById("successModal").style.display = "flex";
+      }
+
+      function hideSuccessModal() {
+        document.getElementById("successModal").style.display = "none";
+      }
+
+      // CORREÇÃO: Configura os eventos quando o DOM estiver carregado
+      document.addEventListener("DOMContentLoaded", function () {
+        checkUserLoggedIn();
+
+        // Aguarda o banco de dados inicializar
+        setTimeout(() => {
+          // Inicializa cursos se necessário
+          schoolDB.initializeCourses();
+
+          // Configura os botões de curso CORRETAMENTE
+          setupCourseEnrollmentButtons();
+        }, 1000);
+
+        // Eventos para fechar modais
+        document.querySelectorAll(".close-modal").forEach((button) => {
+          button.addEventListener("click", hideSuccessModal);
+        });
+
+        // Fecha modal clicando fora
+        document.querySelectorAll(".modal").forEach((modal) => {
+          modal.addEventListener("click", function (e) {
+            if (e.target === this) {
+              if (this.id === "loadingModal") return; // Não fecha loading
+              hideSuccessModal();
+            }
+          });
+        });
+
+        // Para debugging: verifica todos os botões .btn-outline na página
+        const allOutlineButtons = document.querySelectorAll(".btn-outline");
+        console.log(
+          "Total de botões .btn-outline na página:",
+          allOutlineButtons.length
+        );
+        allOutlineButtons.forEach((btn, idx) => {
+          console.log(
+            `Botão ${idx}:`,
+            btn.textContent.trim(),
+            "Pai:",
+            btn.parentElement.className
+          );
+        });
+      });
+
+      // Resto do JavaScript permanece igual
       window.addEventListener("scroll", function () {
         const header = document.getElementById("header");
         if (window.scrollY > 50) {
@@ -409,27 +597,6 @@
       }
 
       document
-        .getElementById("contactForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const name = document.getElementById("name").value;
-          const email = document.getElementById("email").value;
-
-          alert(
-            `Obrigado, ${name}! A sua mensagem foi enviada com sucesso. Entraremos em contacto através do e-mail ${email} em até 48 horas.`
-          );
-
-          this.reset();
-        });
-
-      document
-        .getElementById("accessBtn")
-        .addEventListener("click", function () {
-          alert("A redirecionar para a Área do Aluno...");
-        });
-
-      document
         .getElementById("startJourney")
         .addEventListener("click", function () {
           window.scrollTo({
@@ -442,7 +609,7 @@
         .getElementById("aboutMore")
         .addEventListener("click", function () {
           window.scrollTo({
-            top: document.getElementById("contact").offsetTop - 100,
+            top: document.getElementById("footer").offsetTop - 100,
             behavior: "smooth",
           });
         });
@@ -455,6 +622,7 @@
           }, index * 200);
         });
       });
+
       const burger = document.querySelector(".burger");
       const navMenu = document.querySelector("nav ul");
 
